@@ -8,20 +8,6 @@ export let Get = (ctx) => {
     para: ctx.query
   }
 }
-export let Add = async (ctx) => {
-  let num = ctx.params.num
-  let data = ''
-    let res = await axios({
-      method:'get',
-      url:'https://news-at.zhihu.com/api/4/news/latest',
-      data:{}
-  })
-  ctx.response.body = {
-    code: 200,
-    message: '请求成功',
-    data: res.data,
-  }
-}
 export let Post = async (ctx) => {
   ctx.body = {
     result: 'post',
