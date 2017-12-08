@@ -1,6 +1,9 @@
 import Koa2 from 'koa'
 import KoaBody from 'koa-body'
 import KoaStatic from 'koa-static2'
+import session from 'koa-session2'
+
+
 import {
   System as SystemConfig
 } from './config'
@@ -16,11 +19,14 @@ const app = new Koa2()
 const env = process.env.NODE_ENV || 'development' // Current mode
 
 const publicKey = fs.readFileSync(path.join(__dirname, '../publicKey.pub'))
-
+const logger = require('koa-ln')
+//app.use(logger.access())
+app.use(logger.app())
 app
   .use((ctx, next) => {
     if (ctx.request.header.host.split(':')[0] === 'localhost' || ctx.request.header.host.split(':')[0] === '127.0.0.1') {
-      ctx.set('Access-Control-Allow-Origin', '*')
+      //ctx.set('Access-Control-Allow-Origin', '*')
+      ctx.set('Access-Control-Allow-Origin', ctx.request.header.origin)
     } else {
       ctx.set('Access-Control-Allow-Origin', SystemConfig.HTTP_server_host)
     }
@@ -46,7 +52,6 @@ app
   .use(MainRoutes.routes())
   .use(MainRoutes.allowedMethods())
   .use(ErrorRoutes())
-
 if (env === 'development') { // logger
   app.use((ctx, next) => {
     const start = new Date()
@@ -56,9 +61,7 @@ if (env === 'development') { // logger
     })
   })
 }
-
 app.listen(SystemConfig.API_server_port)
-
 console.log('Now start API server on port ' + SystemConfig.API_server_port + '...')
 
 export default app

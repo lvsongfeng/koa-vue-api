@@ -13,8 +13,11 @@ router
   .put('/api/:name', controllers.api.Put)
   .del('/api/:name', controllers.api.Delect)
   .post('/auth/:action', controllers.auth.Post)
-  //.get('/zhihu/latest',controllers.zhihu.GetNews)
-  // // 知乎获取最近新闻
-   router.get('/zhihu/latest',controllers.zhihu.GetNews)
-   router.get('/zhihu/detail/:id',controllers.zhihu.GetNewsDetail)
+  // 知乎获取最近新闻
+  router.get('/favicon.ico', (ctx) => {
+    console.log('请求图标了')
+  })
+   router.get('/zhihu/latest', controllers.zhihu.GetNews)
+   router.get('/zhihu/detail/:id', controllers.zhihu.GetNewsDetail)
+   router.post('/zhihu/login', controllers.zhihu.userLogin)
 module.exports = router
